@@ -1,16 +1,16 @@
 [
 	{
 
-		"input":"/media/divyesh/9A86D0FD86D0DB39/Divyesh/Projects/npm_project/NEET_SS/JIPMER/JIPMER_CHE_BIO/Jip_Bio.htm",
+		"input":"/media/divyesh/9A86D0FD86D0DB39/Divyesh/Projects/npm_project/Ishan_Test/JEE7.html",
 		"textPattern":"/media/divyesh/9A86D0FD86D0DB39/Divyesh/Projects/npm_project/MainParser/textPattern.txt",
-		"textPatternID":"three",
-		"mappingId": "5ac7262a07381a4ce585fc26",
-        "subjectid": "5ac7262a07381a4ce585fc25",
-        "indexid": "3.0.0",
-       	"accountid": "1155",
-        "folderID": "3",
-		"testId": "5ac7628a07381a4ce585fc69",
-		"sectionId": "5ac7631307381a4ce585fc6c",
+		"textPatternID":"four",
+		"mappingId": "5ae044d207381a7b78e9254d",
+        "subjectid": "5ae044d207381a7b78e9254c",
+        "indexid": "1.0.0",
+       	"accountid": "1224",
+        "folderID": "1",
+		"testId": "5ae0452407381a7b78e9254e",
+		"sectionId": "5ae1c4cf07381a484d40ffb1",
 		"purpose": "PARTNER_SECTION"
 	}
 ]

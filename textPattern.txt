@@ -20,13 +20,24 @@
   },
   "three": {
     "quePattern": "^(\\d+)[.]\\s",
-    "queAnswerPatternINwithoutAnswerPattern" : "(\\d+)[.]\\s",
-    "ansAnswerPatternINwithoutAnswerPattern" : "[(]([a-zA-z])[)]",
-    "optPattern": "([(][a-e][)])",
+    "queAnswerPatternINwithoutAnswerPattern" : "^(\\d+).\\s",
+    "ansAnswerPatternINwithoutAnswerPattern" : "([a-zA-Z])",
+    "optPattern": "([(][A-D][)])",
     "ansPattern": "^ans:.*",
-    "idntPattern": "(\\d+)\\.\\s\\(([a-e])\\)",
+    "idntPattern": "(\\d+).\\s([a-dA-D])",
     "explainationWithHint" : "(##es([\\s\\S]*?)##ee+)",
     "groupofIdentifier":
       "(##qs-(\\d+)([\\s\\S]*?)##qe-\\d+)|(##os-(\\d+)([\\s\\S]*?)##oe-\\d+)"
-  }
+  },
+  "four": {
+    "quePattern": "^(\\d+)[.]\\s",
+    "queAnswerPatternINwithoutAnswerPattern" : "(\\d+)[.]\\s",
+    "ansAnswerPatternINwithoutAnswerPattern" : "([a-dA-D])",
+    "optPattern": "([(][a-dA-D][)])",
+    "ansPattern": "^ans:.*",
+    "idntPattern": "(\\d+).\\s\\(([a-dA-D])\\)",
+    "explainationWithHint" : "(##es([\\s\\S]*?)##ee+)",
+    "groupofIdentifier":
+      "(##qs-(\\d+)([\\s\\S]*?)##qe-\\d+)|(##os-(\\d+)([\\s\\S]*?)##oe-\\d+)"
+}
 }

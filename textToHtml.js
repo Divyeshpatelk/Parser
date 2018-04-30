@@ -117,7 +117,7 @@ for(var srcIndex=0;srcIndex<tempreadData.length;srcIndex++)
     console.log("fullpath :-",fullPath);
     readData = readData.replace(`${imgPath}/${imgName}`,fullPath);
 }
-console.log("Images replace successfully");
+//console.log("Images replace successfully");
 }
 //replace img stop
 
@@ -223,6 +223,14 @@ function withoutAnswer() {
           nonAnsQuetions;
           while (!tempque[outputResultIndex].match(/^##qe-([1-9])/gm)) {
             var que = readQuetions(tempque, quePattern, optPattern);
+            console.log("qUES.......",que);
+            if(que.data.match(/<br>+$/gm)){
+              console.log("original question: "+que.data);
+              var removeBr = new RegExp(/<br>+$/, "gm");
+              que.data = que.data.replace(removeBr,"");
+              console.log("replaced question: "+que.data);
+            }
+
             var opt = readOptions(tempque, optPattern, quePattern, ansPattern);
             if (que && opt) {
               //console.log("option is :- ",opt);
@@ -269,7 +277,7 @@ function withoutAnswer() {
           //console.log("Multiple option is :- "+multipleOption);
           outputResultIndex++;
         }
-
+        console.log("multipleOption: ",multipleOption,"IDE: ",ide);
         storeAnswerForMulichoice(multipleOption, ide);
       }
       outputResultIndex = 0;
@@ -365,7 +373,7 @@ var newDir = `${filePath}`;
 var ReadOutputFile = `${newDir}/${onlyfilenamewithoutExtension}-JSON.txt`;
 
 //End
-console.log("Path to store JSON", ReadOutputFile);
+//console.log("Path to store JSON", ReadOutputFile);
 fs.writeFile(ReadOutputFile, JSON.stringify(combineFile), err => {
   // throws an error, you could also catch it here
   if (err) throw err;
@@ -420,7 +428,9 @@ function readOptions(result, optPattern, quePattern, ansPattern) {
   var count = 0;
   for (; outputResultIndex < result.length; outputResultIndex++) {
     if (result[outputResultIndex].match(optPattern)) {
+      
       tempArr += result[outputResultIndex];
+      tempArr += "<br>";
     } else if (
       result[outputResultIndex].match(quePattern) ||
       result[outputResultIndex].match(ansPattern) ||
@@ -453,12 +463,20 @@ function spreadOption(options) {
   var temp = new Array();
   //for (var i = 0; i < options.length; i++) {
   //splitArray = options.split(new RegExp(optPattern,"gm")); //change 1
-  splitArray = options.split(new RegExp(/[(][a-eA-E][)]/gm));
+  splitArray = options.split(new RegExp(/[(][a-dA-D][)]/gm));
   for (var j = 1; j < splitArray.length; j++) {
     //console.log("option :- "+splitArray[j]);
-    temp.push(splitArray[j].trim());
+    if(splitArray[j].match(/<br>+$/gm)){
+      //console.log("original option: "+splitArray[j]);
+      
+      var removeBr = new RegExp(/<br>+$/, "gm");
+      splitArray[j] = splitArray[j].replace(removeBr,"");
+      //console.log("replaced option: "+splitArray[j]);
+    }
+      temp.push(splitArray[j].trim());
     //console.log(splitArray[j]);
   }
+  
   //}
 
   return temp;
@@ -467,6 +485,7 @@ function spreadOption(options) {
 function storeAnswerForMulichoice(multipleOption, ide) {
   var multiOption = [];
   multiOption = multipleOption.match(idntPattern);
+  //console.log("idntPattern: ",idntPattern);
   var que, answer;
   var storeAnswerSet = [];
   for (var i = 0; i < multiOption.length; i++) {
@@ -483,21 +502,33 @@ function storeAnswerForMulichoice(multipleOption, ide) {
       "gm"
     ); //changes 3
     groupMatch = excePattern.exec(multiOption[i].match(excePattern));
+    console.log("Full match: ",answer);
     //answer = multiOption[i].match(/[(]([a-zA-Z]+)[)]/gm);
     answer = groupMatch[1];
+    console.log("Group match: ",answer);
     //console.log("Without Answer is :- "+answer);
     /* console.log("Question is :-"+que+"\n");
     console.log("Answer is :-"+answer+"\n"); */
+    console.log("Quetion: ",que);
     var temp = { qno: que, ans: answer };
+    console.log("tEMP: ",temp);
     storeAnswerSet.push(temp);
   }
+  //console.log("storeAnswerSet: ",storeAnswerSet);
   var TempStoreAnswer = { identifier: ide, answer: storeAnswerSet };
+  //console.log("TempStoreAnswer: ",TempStoreAnswer.answer[0].qno);
   nonAnsOptions.push(TempStoreAnswer);
-
+  //console.log("nonAnsOptions: ",nonAnsOptions[1].answer.qno);
+  //console.log("Full json nonAnsOptions ",nonAnsOptions);
+  //console.log("Full nonAnsQuetions ",nonAnsQuetions);
   storeAnswerTononAnsQuetions();
+  
 }
 
 function storeAnswerTononAnsQuetions() {
+
+  console.log("nonAnsQuetions: ",nonAnsQuetions.length);
+  console.log("nonAnsOptions: ",nonAnsOptions.length);
   if (nonAnsQuetions != null && nonAnsOptions != null) {
     for (var i = 0; i < nonAnsQuetions.length; i++) {
       if (nonAnsQuetions[i].identifier === nonAnsOptions[1].identifier) {
@@ -532,6 +563,18 @@ function AtoZwithNumber(answer) {
     return 3;
   } else if (answer == "d" || answer == "D") {
     return 4;
+  }
+    else if (answer == "e" || answer == "E") {
+      return 5;
+    }
+    else if (answer == "f" || answer == "F") {
+      return 6;
+    }
+    else if (answer == "g" || answer == "G") {
+      return 7;
+    }
+    else if (answer == "h" || answer == "H") {
+      return 8;
   } else {
     return null;
   }
