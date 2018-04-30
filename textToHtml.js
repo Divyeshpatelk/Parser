@@ -370,7 +370,7 @@ var filePath = path.dirname(readInput);
 var onlyfilenamewithoutExtension = fileName.match(/^((?![.]txt).)*/gm);
 var newDir = `${filePath}`;
 
-var ReadOutputFile = `${newDir}/${onlyfilenamewithoutExtension}-JSON.txt`;
+var ReadOutputFile = `${newDir}/${onlyfilenamewithoutExtension}-JSON.json`;
 
 //End
 //console.log("Path to store JSON", ReadOutputFile);
