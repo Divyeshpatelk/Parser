@@ -3,7 +3,7 @@
     "quePattern": "^(\\d+)[.]\\s",
     "optPattern": "([(][a-dA-D][)])",
     "ansPattern": "^ans:.*",
-    "idntPattern": "\\((\\d+)\\)\\s+\\(([a-dA-D])\\)",  
+    "idntPattern": "\\((\\d+)\\)\\s+\\(([a-dA-D])\\)",
     "groupofIdentifier":
       "(##qs-(\\d+)([\\s\\S]*?)##qe-\\d+)|(##os-(\\d+)([\\s\\S]*?)##oe-\\d+)",
       "examPattern":"\\[[^\\]]+\\]$"
@@ -30,12 +30,34 @@
       "(##qs-(\\d+)([\\s\\S]*?)##qe-\\d+)|(##os-(\\d+)([\\s\\S]*?)##oe-\\d+)"
   },
   "four": {
-    "quePattern": "^(\\d+)[.]\\s",
+    "quePattern": "^\\((\\d+)\\)\\s",
     "queAnswerPatternINwithoutAnswerPattern" : "(\\d+)[.]\\s",
     "ansAnswerPatternINwithoutAnswerPattern" : "([a-dA-D])",
     "optPattern": "([(][a-dA-D][)])",
     "ansPattern": "^ans:.*",
-    "idntPattern": "(\\d+).\\s\\(([a-dA-D])\\)",
+    "idntPattern": "(\\d+).\\s([a-dA-D])",
+    "explainationWithHint" : "(##es([\\s\\S]*?)##ee+)",
+    "groupofIdentifier":
+      "(##qs-(\\d+)([\\s\\S]*?)##qe-\\d+)|(##os-(\\d+)([\\s\\S]*?)##oe-\\d+)"
+},
+"arihant":{
+    "quePattern": "^(\\d+)[.]\\s",
+    "queAnswerPatternINwithoutAnswerPattern" : "(\\d+)[.]\\s",
+    "ansAnswerPatternINwithoutAnswerPattern" : "([A-J])",
+    "optPattern": "([(][A-J][)])",
+    "ansPattern": "^ans:.*",
+    "idntPattern": "(\\d+).\\s+\\(([A-J])\\)",
+    "explainationWithHint" : "(##es([\\s\\S]*?)##ee+)",
+    "groupofIdentifier":
+      "(##qs-(\\d+)([\\s\\S]*?)##qe-\\d+)|(##os-(\\d+)([\\s\\S]*?)##oe-\\d+)"
+},
+"six":{
+    "quePattern": "^(\\d+)[.]\\s",
+    "queAnswerPatternINwithoutAnswerPattern" : "(\\d+)[.]\\s",
+    "ansAnswerPatternINwithoutAnswerPattern" : "([a-kA-K])",
+    "optPattern": "([(][a-dA-D][)])",
+    "ansPattern": "^ans:.*",
+    "idntPattern": "(\\d+).\\s\\(([a-kA-K])\\)",
     "explainationWithHint" : "(##es([\\s\\S]*?)##ee+)",
     "groupofIdentifier":
       "(##qs-(\\d+)([\\s\\S]*?)##qe-\\d+)|(##os-(\\d+)([\\s\\S]*?)##oe-\\d+)"

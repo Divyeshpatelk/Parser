@@ -1,16 +1,16 @@
 [
 	{
 
-		"input":"/media/divyesh/9A86D0FD86D0DB39/Divyesh/Projects/npm_project/Ishan_Test/JEE7.html",
+		"input":"/media/divyesh/9A86D0FD86D0DB39/Divyesh/Projects/npm_project/Neet_And_Aiis/jipmer_PHY/jipmer_PHY_FINAL.html",
 		"textPattern":"/media/divyesh/9A86D0FD86D0DB39/Divyesh/Projects/npm_project/MainParser/textPattern.txt",
-		"textPatternID":"four",
-		"mappingId": "5ae044d207381a7b78e9254d",
-        "subjectid": "5ae044d207381a7b78e9254c",
+		"textPatternID":"arihant",
+		"mappingId": "5af59a1907381a5ed857aaee",
+        "subjectid": "5af59a1907381a5ed857aaed",
         "indexid": "1.0.0",
-       	"accountid": "1224",
-        "folderID": "1",
-		"testId": "5ae0452407381a7b78e9254e",
-		"sectionId": "5ae1c4cf07381a484d40ffb1",
-		"purpose": "PARTNER_SECTION"
-	}
-]
+       	"accountid": "1468",
+        "folderID": "6",
+		"sectionId":"5afc225007381a5ed857afa7",
+		"testId":"5afc21f507381a5ed857af9e",
+		"purpose":"PARTNER_SECTION"
+	
+}]

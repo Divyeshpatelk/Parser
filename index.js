@@ -18,6 +18,7 @@ const convertToUnicode = (config) => {
   const gopikaTwo2Regex = /GopikaTwo/i;
   const symbolRegex = /symbol/i;
   const mtExtraRegex = /mt[ ]?extra|euclid[ ]?extra/i;
+  const arjunRegex = /arjun/i;
 
   const $ = window.$; //otherwise the transpiler will rename it and won't work
   const body = $('body');
@@ -72,6 +73,10 @@ const convertToUnicode = (config) => {
 
     if (fontFace.match(mtExtraRegex) && config['symbol']) {
       node.textContent = `<span class="ql-font-euclid-extra">${node.textContent}</span>`;
+    }
+
+    if (fontFace.match(arjunRegex)) {
+      node.textContent = `<span class="ql-font-arjun">${node.textContent}</span>`;
     }
 
     if (verticalAlign === 'super' && config['sup']) {

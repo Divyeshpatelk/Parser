@@ -36,9 +36,9 @@ var groupofIdentifier = new RegExp(
   "gm"
 );
 
-var result = new Array();
-var nonAnswerQue = new Array();
-var notAnswer = new Array();
+var result = [];
+var nonAnswerQue = [];
+var notAnswer = [];
 
 //JSON Block .............................................
 var outputResult = [
@@ -53,7 +53,7 @@ var outputResult = [
   } */
 ];
 
-var stringArray = new Array();
+var stringArray = [];
 var nonAnsQuetions = [
   /* {
     identifier: "",
@@ -110,11 +110,11 @@ if(tempreadData){
 for(var srcIndex=0;srcIndex<tempreadData.length;srcIndex++)
 {
     var imgName = path.basename(tempreadData[srcIndex]);
-    console.log("basename :-",imgName);
+    //console.log("basename :-",imgName);
     var imgPath = path.dirname(tempreadData[srcIndex]);
-    console.log("Path :-",imgPath);
+    //console.log("Path :-",imgPath);
     var fullPath = `src="${oIMG}/${imgName}`;
-    console.log("fullpath :-",fullPath);
+    //console.log("fullpath :-",fullPath);
     readData = readData.replace(`${imgPath}/${imgName}`,fullPath);
 }
 //console.log("Images replace successfully");
@@ -201,6 +201,9 @@ function withoutAnswer() {
     explaination = readData.match(explainationWithHint);
     explainationJson = storeExplaination(explaination);
   }
+  /* for(let i=0;i<nonAnswerQue.length;i++){
+    console.log("group data: ",nonAnswerQue+"\n");
+  } */
 
   //main work ............................
   if (nonAnswerQue) {
@@ -215,7 +218,7 @@ function withoutAnswer() {
         var excePattern = new RegExp(/^##qs-(\d+)/gm);
         var groupMatch = excePattern.exec(nonAnswerQue[n].match(excePattern));
         var ide = groupMatch[1];
-        console.log("identifire is :-", ide);
+        //console.log("identifire is :-", ide);
         var tempque = nonAnswerQue[n].match(/.*/gm);
         var storeQuestionsSet = [];
         for (; outputResultIndex < tempque.length; outputResultIndex++) {
@@ -223,17 +226,31 @@ function withoutAnswer() {
           nonAnsQuetions;
           while (!tempque[outputResultIndex].match(/^##qe-([1-9])/gm)) {
             var que = readQuetions(tempque, quePattern, optPattern);
-            console.log("qUES.......",que);
-            if(que.data.match(/<br>+$/gm)){
-              console.log("original question: "+que.data);
+            //console.log("qUES.......",que);
+            /* if(que.data.match(/<br>+$/gm)){
+
               var removeBr = new RegExp(/<br>+$/, "gm");
               que.data = que.data.replace(removeBr,"");
-              console.log("replaced question: "+que.data);
-            }
+
+            } */
+
+
+
+            que.data = que.data.replace(/\s+$/, "");
+              while (que.data.match(/<br>+$/gm)) {
+                var removeBr = new RegExp(/<br>+$/, "gm");
+                que.data = que.data.replace(removeBr, "");
+                que.data = que.data.replace(/\s+$/, "");
+              }
 
             var opt = readOptions(tempque, optPattern, quePattern, ansPattern);
+            //console.log("option is: ",opt);
             if (que && opt) {
               //console.log("option is :- ",opt);
+              var pastexam = (que.data).match(new RegExp(/\[[^\]]+\][ ]{0,}$/gm));
+              que.data = que.data.replace(new RegExp(/\[[^\]]+\][ ]{0,}$/gm), "");
+              //console.log("past exam: ",pastexam);
+
               var options1 = spreadOption(opt);
 
               var optionArraywithID = [];
@@ -247,7 +264,8 @@ function withoutAnswer() {
                 questions: remTagofquetions.trim(),
                 choices: optionArraywithID, //baki
                 ans: [],
-                explaination: ""
+                explaination: "",
+                pastExams: pastexam
               };
               storeQuestionsSet.push(temp);
             }
@@ -264,12 +282,12 @@ function withoutAnswer() {
         var excePattern = new RegExp(/^##os-(\d+)/gm);
         var groupMatch = excePattern.exec(nonAnswerQue[n].match(excePattern));
         var ide = groupMatch[1];
-        console.log("identifier of option :- " + ide);
+        //console.log("identifier of option :- " + ide);
 
         outputResultIndex++;
         var multipleOption = "";
         var tempque = nonAnswerQue[n].match(/.*/gm);
-        console.log(tempque, "tempque length", tempque.length);
+        //console.log(tempque, "tempque length", tempque.length);
         for (; outputResultIndex < tempque.length; outputResultIndex++) {
           while (!tempque[outputResultIndex].match(/^##oe-([1-9])/gm)) {
             multipleOption += tempque[outputResultIndex++];
@@ -277,7 +295,7 @@ function withoutAnswer() {
           //console.log("Multiple option is :- "+multipleOption);
           outputResultIndex++;
         }
-        console.log("multipleOption: ",multipleOption,"IDE: ",ide);
+        //console.log("multipleOption: ",multipleOption,"IDE: ",ide);
         storeAnswerForMulichoice(multipleOption, ide);
       }
       outputResultIndex = 0;
@@ -309,7 +327,7 @@ console.log("\nWith answer section :- \n"); */
   console.log(outputResult[i].rightAnswer + "\n");
    console.log(
     "----------------------------------------------------------------"
-  ); 
+  );
 }
 console.log("\n***************************************************\n"); */
 //End Display Section ...................................
@@ -327,7 +345,7 @@ fs.writeFile(ReadOutputFile, JSON.stringify(outputResult), err => {
 //Write json into text without Answer
 outputResult2 = [];
 //console.log("Final output for without Answer"+nonAnsQuetions);
-for (var i = 0; i < nonAnsQuetions.length; i++) {
+ for (var i = 0; i < nonAnsQuetions.length; i++) {
   for (var j = 0; j < nonAnsQuetions[i].que.length; j++) {
     outputResult2.push({
       type: "SINGLE",
@@ -339,6 +357,7 @@ for (var i = 0; i < nonAnsQuetions.length; i++) {
       // explanationDelta: null,
       rightAnswers: nonAnsQuetions[i].que[j].ans,
       explanation: nonAnsQuetions[i].que[j].explaination,
+      pastExams:nonAnsQuetions[i].que[j].pastExams,
       courses: [
         {
           mappingId: argv.mappingId,
@@ -351,13 +370,39 @@ for (var i = 0; i < nonAnsQuetions.length; i++) {
       purpose: argv.purpose
     });
   }
-}
+} 
+/*
+for (var i = 0; i < nonAnsQuetions.length; i++) {
+  for (var j = 0; j < nonAnsQuetions[i].que.length; j++) {
+    outputResult2.push({
+      type: "SINGLE",
+      question: nonAnsQuetions[i].que[j].questions,
+      // questionDelta: "",
+      choices: nonAnsQuetions[i].que[j].choices,
+      difficultyLevel: 1,
+      // explanation: null,
+      // explanationDelta: null,
+      rightAnswers: nonAnsQuetions[i].que[j].ans,
+      explanation: nonAnsQuetions[i].que[j].explaination,
+      pastExams:nonAnsQuetions[i].que[j].pastExams,
+      courses: [
+        {
+          mappingId: argv.mappingId,
+          subjectid: argv.subjectid,
+          indexid: argv.indexid
+
+        }
+      ]
+    });
+  }
+}*/
+
 /* console.log("Successfullly Converted nonAnsQuetions => OutputResult2 withoutQuetions");
   var ReadOutputMultiQuestion = argv.outputText2;
   fs.writeFile(ReadOutputMultiQuestion, JSON.stringify(outputResult2), err => {
     // throws an error, you could also catch it here
     if (err) throw err;
-  
+
     // success case, the file was saved
     console.log("Data Save Successfully WithoutAnswer");
   }); */
@@ -378,7 +423,7 @@ fs.writeFile(ReadOutputFile, JSON.stringify(combineFile), err => {
   // throws an error, you could also catch it here
   if (err) throw err;
   // success case, the file was saved
-  console.log("Data Save Successfully with Answer");
+  //console.log("Data Save Successfully with Answer");
 });
 
 function readQuetions(result, quePattern, optPattern) {
@@ -428,7 +473,7 @@ function readOptions(result, optPattern, quePattern, ansPattern) {
   var count = 0;
   for (; outputResultIndex < result.length; outputResultIndex++) {
     if (result[outputResultIndex].match(optPattern)) {
-      
+
       tempArr += result[outputResultIndex];
       tempArr += "<br>";
     } else if (
@@ -463,12 +508,12 @@ function spreadOption(options) {
   var temp = new Array();
   //for (var i = 0; i < options.length; i++) {
   //splitArray = options.split(new RegExp(optPattern,"gm")); //change 1
-  splitArray = options.split(new RegExp(/[(][a-dA-D][)]/gm));
+  splitArray = options.split(new RegExp(/[(][A-J][)]/gm));
   for (var j = 1; j < splitArray.length; j++) {
     //console.log("option :- "+splitArray[j]);
     if(splitArray[j].match(/<br>+$/gm)){
       //console.log("original option: "+splitArray[j]);
-      
+
       var removeBr = new RegExp(/<br>+$/, "gm");
       splitArray[j] = splitArray[j].replace(removeBr,"");
       //console.log("replaced option: "+splitArray[j]);
@@ -476,7 +521,7 @@ function spreadOption(options) {
       temp.push(splitArray[j].trim());
     //console.log(splitArray[j]);
   }
-  
+
   //}
 
   return temp;
@@ -485,11 +530,12 @@ function spreadOption(options) {
 function storeAnswerForMulichoice(multipleOption, ide) {
   var multiOption = [];
   multiOption = multipleOption.match(idntPattern);
-  //console.log("idntPattern: ",idntPattern);
+  //console.log("multiple answer and quetions: ",multiOption);
   var que, answer;
   var storeAnswerSet = [];
   for (var i = 0; i < multiOption.length; i++) {
     //que = multiOption[i].match(/^[(](\d+)[)]/gm);
+    //console.log("my AnswerSet: ",multiOption[i]+"\n");
     var excePattern = new RegExp(
       jsonData[jsonDataID].queAnswerPatternINwithoutAnswerPattern,
       "gm"
@@ -502,16 +548,16 @@ function storeAnswerForMulichoice(multipleOption, ide) {
       "gm"
     ); //changes 3
     groupMatch = excePattern.exec(multiOption[i].match(excePattern));
-    console.log("Full match: ",answer);
+    //console.log("Full match: ",answer);
     //answer = multiOption[i].match(/[(]([a-zA-Z]+)[)]/gm);
     answer = groupMatch[1];
-    console.log("Group match: ",answer);
+    //console.log("Answer IS :: ",answer);
     //console.log("Without Answer is :- "+answer);
     /* console.log("Question is :-"+que+"\n");
     console.log("Answer is :-"+answer+"\n"); */
-    console.log("Quetion: ",que);
+    //console.log("Quetion: ",que);
     var temp = { qno: que, ans: answer };
-    console.log("tEMP: ",temp);
+    //console.log("tEMP: ",temp);
     storeAnswerSet.push(temp);
   }
   //console.log("storeAnswerSet: ",storeAnswerSet);
@@ -522,13 +568,13 @@ function storeAnswerForMulichoice(multipleOption, ide) {
   //console.log("Full json nonAnsOptions ",nonAnsOptions);
   //console.log("Full nonAnsQuetions ",nonAnsQuetions);
   storeAnswerTononAnsQuetions();
-  
+
 }
 
 function storeAnswerTononAnsQuetions() {
 
-  console.log("nonAnsQuetions: ",nonAnsQuetions.length);
-  console.log("nonAnsOptions: ",nonAnsOptions.length);
+  //console.log("nonAnsQuetions: ",nonAnsQuetions.length);
+  //console.log("nonAnsOptions: ",nonAnsOptions.length);
   if (nonAnsQuetions != null && nonAnsOptions != null) {
     for (var i = 0; i < nonAnsQuetions.length; i++) {
       if (nonAnsQuetions[i].identifier === nonAnsOptions[1].identifier) {
@@ -575,7 +621,14 @@ function AtoZwithNumber(answer) {
     }
     else if (answer == "h" || answer == "H") {
       return 8;
-  } else {
+  }
+  else if (answer == "i" || answer == "I") {
+    return 9;
+}
+else if (answer == "j" || answer == "J") {
+  return 10;
+}
+  else {
     return null;
   }
 }
@@ -593,6 +646,8 @@ function storeExplaination(explaination) {
         var no = groupMatch[1];
         //console.log("not error ",no);
         do {
+          if(explainationData[j])
+          explainationData[j] += "<br>";
           dataOfQuetions += explainationData[j];
           //console.log("Explaination data is ",dataOfQuetions);
           j++;
@@ -606,6 +661,14 @@ function storeExplaination(explaination) {
           }
         } while (!explainationData[j].match(quePattern));
         j--;
+
+        dataOfQuetions = dataOfQuetions.replace(/\s+$/, "");
+              while (dataOfQuetions.match(/<br>+$/gm)) {
+                var removeBr = new RegExp(/<br>+$/, "gm");
+                dataOfQuetions = dataOfQuetions.replace(removeBr, "");
+                dataOfQuetions = dataOfQuetions.replace(/\s+$/, "");
+              }
+
         explainationArray.push({
           qno: no,
           exp: dataOfQuetions.replace(quePattern, "")
