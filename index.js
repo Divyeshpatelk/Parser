@@ -5,11 +5,13 @@ const path = require('path');
 const argv = require('minimist')(process.argv.slice(2));
 //const inputFile = path.resolve(argv['_'].length > 0 ? argv['_'][0] : null);
 //if (!inputFile) {
-  //console.log('No input file.');
+//console.log('No input file.');
 //}
 var inputFile = argv['input'];
 const outputHTML = argv['outputHTML'];
 const outputText = argv['outputText'];
+var imgSize = argv['imgSize'];
+console.log("image size is:- ", imgSize);
 //Automatic path:-
 
 
@@ -28,9 +30,9 @@ const convertToUnicode = (config) => {
     switch (node.nodeName) {
       case 'IMG':
         if (config['img']) {
-          let imgHTML = node.outerHTML;
-          const height = $(node).css('height');
-          const width = $(node).css('width');
+          /*  let imgHTML = node.outerHTML;
+           const height = $(node).css('height');
+           const width = $(node).css('width'); */
 
           //Divyesh Changes for half/Image  (Start)
           /* var height1 = parseInt(height.match(/\d+[.]\d+/gm));
@@ -40,13 +42,26 @@ const convertToUnicode = (config) => {
           width1 /= 2;
           width1+="px"; */
           //Divyesh Changes for half/Image  (End)
+          let imgHTML = node.outerHTML;
 
-          const sizeString = `height="${height}" width="${width}" style="height: ${height};width: ${width}"`;
+          if (config['imgSize'] === "true") {
+
+            const height = $(node).css('height');
+            const width = $(node).css('width');
+
+            const sizeString = `height="${height}" width="${width}" style="height: ${height};width: ${width}"`;
+            imgHTML = imgHTML.replace(
+              new RegExp(/(?:class|className)=(?:["']\W+\s*(?:\w+)\()?["']([^'"]+)['"]/, 'g'),
+              sizeString
+            );
+
+          }
+          else if(config['imgSize'] === "false"){
+            imgHTML = imgHTML.replace(new RegExp(/width="[0-9]+./gm),"");
+            imgHTML = imgHTML.replace(new RegExp(/height="[0-9]+./gm),"");
+          }
           //const sizeString = `height="${height1}" width="${width1}" style="height: ${height1};width: ${width1}"`;
-          imgHTML = imgHTML.replace(
-            new RegExp(/(?:class|className)=(?:["']\W+\s*(?:\w+)\()?["']([^'"]+)['"]/, 'g'),
-            sizeString
-          );
+
 
           let imgText = document.createTextNode(imgHTML);
           const parent = $(node).parent()[0];
@@ -125,16 +140,28 @@ const convertToUnicode = (config) => {
 };
 
 (async () => {
-  const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
   const page = await browser.newPage();
 
   // TODO probable path processing for windows paths
   await page.goto('file://' + inputFile);
-  await page.addScriptTag({ path: require.resolve('jquery') });
-  await page.addScriptTag({ path: require.resolve('./unicoder/unicode') });
-  await page.addScriptTag({ path: require.resolve('./unicoder/unicode-gu') });
-  await page.addScriptTag({ path: require.resolve('./unicoder/BhartiGopika') });
-  await page.addScriptTag({ path: require.resolve('./unicoder/GopikaTwo2') });
+  await page.addScriptTag({
+    path: require.resolve('jquery')
+  });
+  await page.addScriptTag({
+    path: require.resolve('./unicoder/unicode')
+  });
+  await page.addScriptTag({
+    path: require.resolve('./unicoder/unicode-gu')
+  });
+  await page.addScriptTag({
+    path: require.resolve('./unicoder/BhartiGopika')
+  });
+  await page.addScriptTag({
+    path: require.resolve('./unicoder/GopikaTwo2')
+  });
 
   // page.on('console', (msg) => {
   //   for (let i = 0; i < msg.args().length; ++i) console.log(`${i}: ${msg.args()[i]}`);
@@ -144,7 +171,7 @@ const convertToUnicode = (config) => {
   if (outputHTML) {
     await page.evaluate(convertToUnicode, true);
     const content = await page.content();
-    fs.writeFile(path.resolve(outputHTML), content, function(err) {
+    fs.writeFile(path.resolve(outputHTML), content, function (err) {
       if (err) {
         return console.log(err);
       }
@@ -152,9 +179,15 @@ const convertToUnicode = (config) => {
   }
 
   if (outputText) {
-    await page.evaluate(convertToUnicode, { img: true, sup: true, sub: true, symbol: true });
+    await page.evaluate(convertToUnicode, {
+      img: true,
+      imgSize,
+      sup: true,
+      sub: true,
+      symbol: true
+    });
     const text = await page.evaluate(() => $('body')[0].innerText);
-    fs.writeFile(path.resolve(outputText), text, function(err) {
+    fs.writeFile(path.resolve(outputText), text, function (err) {
       if (err) {
         return console.log(err);
       }

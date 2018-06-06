@@ -57,6 +57,7 @@ function parseHTML(json) {
   //var outputText = json.outputText;
   var fileName = path.basename(json.input);
   var filePath = path.dirname(json.input);
+  var imgSize = argv.imgSize;
   var onlyfilenamewithoutExtension = fileName.match(/^((?![.]html).)*/gm); 
   var newDir = `${filePath}`;
   var outputHTML = `${newDir}/${onlyfilenamewithoutExtension}-converted.html`;
@@ -66,7 +67,7 @@ function parseHTML(json) {
  //Joel's Parser. uncomment when converting the original HTML to converted HTML & TXT.
   if(key === 1)
   {
-    var htmlTOtext = `node index.js --input=${input} --outputHTML=${outputHTML} --outputText=${outputText}`;
+    var htmlTOtext = `node index.js --input=${input} --outputHTML=${outputHTML} --outputText=${outputText} --imgSize=${imgSize}`;
     cmd.get(htmlTOtext, function(err, data, stderr) {
     console.log("Display data HTML :-" + data + "\n");
     console.log("Error is HTML :-" + err + "\n");

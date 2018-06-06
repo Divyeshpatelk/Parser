@@ -668,7 +668,7 @@ function storeExplaination(explaination) {
                 dataOfQuetions = dataOfQuetions.replace(removeBr, "");
                 dataOfQuetions = dataOfQuetions.replace(/\s+$/, "");
               }
-
+              dataOfQuetions = dataOfQuetions.replace("##ee","");
         explainationArray.push({
           qno: no,
           exp: dataOfQuetions.replace(quePattern, "")
